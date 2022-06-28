@@ -10,12 +10,15 @@
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=BioRhyme:wght@200;300;400;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=BioRhyme:wght@200;300;400;700;800&display=swap"
+        rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
+        rel="stylesheet">
     <link rel="shortcut icon" href="#">
-    <script src = "main.js" defer></script>
+    <script src="main.js" defer></script>
 </head>
 
 <body>
@@ -44,11 +47,11 @@
                 <a onclick="casa2t();">Casa DHT2</a>
             </div>
         </div>
-        <div class = "chart-container">
-            <svg hidden="hidden" class = "chart-canvas" width="960" height="500"></svg>
+        <div class="chart-container">
+            <svg hidden="hidden" class="chart-canvas" width="960" height="500"></svg>
             <script>
 
-                parseInt(d3. select('.chart-container'). style('width'), 10)
+                parseInt(d3.select('.chart-container').style('width'), 10)
 
                 function myFunction() {
                     document.getElementById("myDropdown").classList.toggle("show");
@@ -66,7 +69,7 @@
                     nameoffile = '/casaDHT1.csv';
                     createt(nameoffile);
                 }
-                
+
 
                 // Close the dropdown menu if the user clicks outside of it
                 window.onclick = function (event) {
@@ -82,7 +85,7 @@
                     }
                 }
                 function create(nameoffile) {
-                    var xValue = d => d.timestamp;
+                    var xValue = d => d.date;
                     var xLabel = 'Data';
                     var yValue = d => d.humidity;
                     var yLabel = 'Humidade %';
@@ -129,9 +132,9 @@
                         .tickSize(-innerWidth);
 
                     var row = d => {
-                        var date = new Date(d.timestamp * 1000);
-                        d.timestamp = date;
-                        //console.log(d.timestamp);
+                        var date = new Date(parseInt(d.date) * 1000);
+                        d.date = date;
+                        console.log(d.date);
                         d.humidity = +d.humidity;
                         return d;
                     };
@@ -160,7 +163,7 @@
                     });
                 }
                 function createt(nameoffile) {
-                    var xValue = d => d.timestamp;
+                    var xValue = d => d.date;
                     var xLabel = 'Data';
                     var yValue = d => d.temperature;
                     var yLabel = 'Temperatura ºC';
@@ -207,8 +210,8 @@
                         .tickSize(-innerWidth);
 
                     var row = d => {
-                        var date = new Date(d.timestamp * 1000);
-                        d.timestamp = date;
+                        var date = new Date(d.date * 1000);
+                        d.date = date;
                         //console.log(d.timestamp);
                         d.temperature = +d.temperature;
                         return d;
