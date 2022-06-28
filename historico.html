@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ambientes Domiciliários</title>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=BioRhyme:wght@200;300;400;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="#">
+    <script src = "main.js" defer></script>
+</head>
+
+<body>
+    <header class="header">
+        <div class="hamb-menu">
+            <div class="hamb-lines"></div>
+        </div>
+        <h2><a href="index.html">Ambientes Domiciliários</a></h2>
+        <nav>
+            <ul class="menu-items">
+                <li><a href="/mapa.html" class="menu-item"> Mapa Geral </a></li>
+                <li><a href="/dados.html" class="menu-item"> Dados em Tempo Real </a></li>
+                <li><a href="/historico.html" class="menu-item"> Histórico </a></li>
+            </ul>
+        </nav>
+    </header>
+    <section class="section hero-section">
+        <div class="dropdown">
+            <button onclick="myFunction()" class="dropbtn">Selecionar Gráfico Humidade</button>
+            <div id="myDropdown" class="dropdown-content" style="float: left;">
+                <a onclick="casa2h();">Casa DHT2</a>
+            </div>
+
+            <button onclick="myFunctiont()" class="dropbtn">Selecionar Gráfico Temperatura</button>
+            <div id="myDropdown2" class="dropdown-content" style="float: right;">
+                <a onclick="casa2t();">Casa DHT2</a>
+            </div>
+        </div>
+        <div class = "chart-container">
+            <svg hidden="hidden" class = "chart-canvas" width="960" height="500"></svg>
+            <script>
+
+                parseInt(d3. select('.chart-container'). style('width'), 10)
+
+                function myFunction() {
+                    document.getElementById("myDropdown").classList.toggle("show");
+                }
+                function myFunctiont() {
+                    document.getElementById("myDropdown2").classList.toggle("show");
+                }
+                function casa2h() {
+                    d3.selectAll("svg > *").remove();
+                    nameoffile = '/casaDHT1.csv';
+                    create(nameoffile);
+                }
+                function casa2t() {
+                    d3.selectAll("svg > *").remove();
+                    nameoffile = '/casaDHT1.csv';
+                    createt(nameoffile);
+                }
+                
+
+                // Close the dropdown menu if the user clicks outside of it
+                window.onclick = function (event) {
+                    if (!event.target.matches('.dropbtn')) {
+                        var dropdowns = document.getElementsByClassName("dropdown-content");
+                        var i;
+                        for (i = 0; i < dropdowns.length; i++) {
+                            var openDropdown = dropdowns[i];
+                            if (openDropdown.classList.contains('show')) {
+                                openDropdown.classList.remove('show');
+                            }
+                        }
+                    }
+                }
+                function create(nameoffile) {
+                    var xValue = d => d.timestamp;
+                    var xLabel = 'Data';
+                    var yValue = d => d.humidity;
+                    var yLabel = 'Humidade %';
+                    var margin = { left: 90, right: 30, top: 20, bottom: 140 };
+
+                    var svg = d3.select('svg');
+                    var width = svg.attr('width');
+                    var height = svg.attr('height');
+                    var innerWidth = width - margin.left - margin.right;
+                    var innerHeight = height - margin.top - margin.bottom;
+
+                    var g = svg.append('g')
+                        .attr('transform', `translate(${margin.left},${margin.top})`);
+                    var xAxisG = g.append('g')
+                        .attr('transform', `translate(0, ${innerHeight})`);
+                    var yAxisG = g.append('g');
+
+                    xAxisG.append('text')
+                        .attr('class', 'axis-label')
+                        .attr('x', innerWidth / 2)
+                        .attr('y', 100)
+                        .text(xLabel);
+
+                    yAxisG.append('text')
+                        .attr('class', 'axis-label')
+                        .attr('x', -innerHeight / 2)
+                        .attr('y', -60)
+                        .attr('transform', `rotate(-90)`)
+                        .style('text-anchor', 'middle')
+                        .text(yLabel);
+
+                    var xScale = d3.scaleTime();
+                    var yScale = d3.scaleLinear();
+
+                    var xAxis = d3.axisBottom()
+                        .scale(xScale)
+                        .tickPadding(15)
+                        .tickSize(-innerHeight);
+
+                    var yAxis = d3.axisLeft()
+                        .scale(yScale)
+                        .ticks(5)
+                        .tickPadding(15)
+                        .tickSize(-innerWidth);
+
+                    var row = d => {
+                        var date = new Date(d.timestamp * 1000);
+                        d.timestamp = date;
+                        //console.log(d.timestamp);
+                        d.humidity = +d.humidity;
+                        return d;
+                    };
+
+                    d3.csv(nameoffile, row, data => {
+                        xScale
+                            .domain(d3.extent(data, xValue))
+                            .range([0, innerWidth])
+                            .nice();
+
+                        yScale
+                            .domain(d3.extent(data, yValue))
+                            .range([innerHeight, 0])
+                            .nice();
+
+                        g.selectAll('circle').data(data)
+                            .enter().append('circle')
+                            .attr('cx', d => xScale(xValue(d)))
+                            .attr('cy', d => yScale(yValue(d)))
+                            .style('fill', "#01ba73")
+                            .attr("fill-opacity", 0.6)
+                            .attr('r', 4);
+
+                        xAxisG.call(xAxis);
+                        yAxisG.call(yAxis);
+                    });
+                }
+                function createt(nameoffile) {
+                    var xValue = d => d.timestamp;
+                    var xLabel = 'Data';
+                    var yValue = d => d.temperature;
+                    var yLabel = 'Temperatura ºC';
+                    var margin = { left: 90, right: 30, top: 20, bottom: 140 };
+
+                    var svg = d3.select('svg');
+                    var width = svg.attr('width');
+                    var height = svg.attr('height');
+                    var innerWidth = width - margin.left - margin.right;
+                    var innerHeight = height - margin.top - margin.bottom;
+
+                    var g = svg.append('g')
+                        .attr('transform', `translate(${margin.left},${margin.top})`);
+                    var xAxisG = g.append('g')
+                        .attr('transform', `translate(0, ${innerHeight})`);
+                    var yAxisG = g.append('g');
+
+                    xAxisG.append('text')
+                        .attr('class', 'axis-label')
+                        .attr('x', innerWidth / 2)
+                        .attr('y', 100)
+                        .text(xLabel);
+
+                    yAxisG.append('text')
+                        .attr('class', 'axis-label')
+                        .attr('x', -innerHeight / 2)
+                        .attr('y', -60)
+                        .attr('transform', `rotate(-90)`)
+                        .style('text-anchor', 'middle')
+                        .text(yLabel);
+
+                    var xScale = d3.scaleTime();
+                    var yScale = d3.scaleLinear();
+
+                    var xAxis = d3.axisBottom()
+                        .scale(xScale)
+                        .tickPadding(15)
+                        .tickSize(-innerHeight);
+
+                    var yAxis = d3.axisLeft()
+                        .scale(yScale)
+                        .ticks(5)
+                        .tickPadding(15)
+                        .tickSize(-innerWidth);
+
+                    var row = d => {
+                        var date = new Date(d.timestamp * 1000);
+                        d.timestamp = date;
+                        //console.log(d.timestamp);
+                        d.temperature = +d.temperature;
+                        return d;
+                    };
+
+                    d3.csv(nameoffile, row, data => {
+                        xScale
+                            .domain(d3.extent(data, xValue))
+                            .range([0, innerWidth])
+                            .nice();
+
+                        yScale
+                            .domain(d3.extent(data, yValue))
+                            .range([innerHeight, 0])
+                            .nice();
+
+                        g.selectAll('circle').data(data)
+                            .enter().append('circle')
+                            .attr('cx', d => xScale(xValue(d)))
+                            .attr('cy', d => yScale(yValue(d)))
+                            .style('fill', "#01ba73")
+                            .attr('fill-opacity', 0.6)
+                            .attr('r', 4);
+
+                        xAxisG.call(xAxis);
+                        yAxisG.call(yAxis);
+                    });
+                }
+            </script>
+        </div>
+    </section>
+</body>
+
+</html>
