@@ -223,10 +223,13 @@ div{
 */
 
 input {
-    border-radius: 1px 1px 1px 1px;
-    padding: 2px 4px;
+    border-radius: 5px 5px 5px 5px;
+    padding: 0.5rem 0.5rem;
     color: #05203d;
     background-color: #e2e2e2;
+    outline: none;
+    cursor: pointer;
+    border: none;
 }
 
 .form-container {
@@ -258,15 +261,14 @@ input {
 }
 
 .dropbtn {
-    border: none;
-    cursor: pointer;
     border-radius: 5px 5px 5px 5px;
-    padding: 2px 4px;
+    padding: 0.5rem 0.5rem;
     color: #05203d;
     background-color: #e2e2e2;
-    padding: 1rem;
-    font-size: 1em;
-    font-weight: 300;
+    outline: none;
+    cursor: pointer;
+    border: none;
+    font-size: 1rem;
 }
 
 .domain {
@@ -309,6 +311,7 @@ input {
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
     position: absolute;
+    cursor: pointer;
 }
 
 /* Links inside the dropdown */
@@ -326,7 +329,11 @@ input {
 
 /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
 .show {
-    display: block;
+    display: inline-block;
+}
+
+ul{
+    list-style: none;
 }
 
 .chart-canvas { 

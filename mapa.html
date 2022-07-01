@@ -54,6 +54,7 @@
             var map = d3.json("covilha.geojson");
             var locais = d3.csv("locais.csv");
 
+            /*
             var tooltip = d3
                 .select("#map-container")
                 .append("div")
@@ -77,6 +78,7 @@
                 var mouseleave = function(d) {
                     Tooltip.style("opacity", 0)
                 }
+            */
 
             Promise.all([map, locais]).then(function(values){    
         // draw map
@@ -100,10 +102,12 @@
                 .attr("cy", function(d) {
                     return projection([d.lon, d.lat])[1];
                 })
-                .attr("r", "1px")
+                .attr("r", "1px");
+                /*
                 .on("mouseover", mouseover)
                 .on("mousemove", mousemove)
                 .on("mouseleave", mouseleave);
+                */
             });
         </script>
     </section>

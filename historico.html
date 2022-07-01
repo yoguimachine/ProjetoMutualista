@@ -38,14 +38,14 @@
     <section class="section hero-section">
         <div class="dropdown">
             <button onclick="myFunction()" class="dropbtn">Selecionar Gráfico Humidade</button>
-            <div id="myDropdown" class="dropdown-content" style="float: left;">
-                <a onclick="casa2h();">Casa DHT2</a>
-            </div>
+            <ul id="myDropdown" class="dropdown-content">
+                <li><a onclick="casa1h();">Casa DHT1</a></li>
+            </ul>
 
             <button onclick="myFunctiont()" class="dropbtn">Selecionar Gráfico Temperatura</button>
-            <div id="myDropdown2" class="dropdown-content" style="float: right;">
-                <a onclick="casa2t();">Casa DHT2</a>
-            </div>
+            <ul id="myDropdown2" class="dropdown-content">
+                <li><a onclick="casa1t();">Casa DHT1</a></li>
+            </ul>
         </div>
         <div class="chart-container">
             <svg hidden="hidden" class="chart-canvas" width="960" height="500"></svg>
@@ -59,12 +59,12 @@
                 function myFunctiont() {
                     document.getElementById("myDropdown2").classList.toggle("show");
                 }
-                function casa2h() {
+                function casa1h() {
                     d3.selectAll("svg > *").remove();
                     nameoffile = '/casaDHT1.csv';
                     create(nameoffile);
                 }
-                function casa2t() {
+                function casa1t() {
                     d3.selectAll("svg > *").remove();
                     nameoffile = '/casaDHT1.csv';
                     createt(nameoffile);

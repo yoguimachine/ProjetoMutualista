@@ -62,17 +62,11 @@
                 <tr>
                     <td>Altitude</td><td id = "alt"></td>
                 </tr>
-                <tr>
-                    <td>Data</td><td id = "data"></td>
-                </tr>
                 --> 
             </tbody>
         </table>
-        <!--
         <input id = "last10Btn" type = "button" onclick = "CreateTableFromJSON()" value = "Últimas 10 Leituras" />
         <table class = "content-table last10Table" id = "ex-table"></table>
-        -->
-
         <script type="module">
             /*
             $(document).ready(function () {
@@ -84,14 +78,14 @@
 
         //configuração da app+database
             const config = {
-                apiKey: "AIzaSyBhM_bJZAhk62do8Q2a0Yy5l1ev4AbzuZs",
-                authDomain: "fundaowebapp.firebaseapp.com",
-                databaseURL: "https://fundaowebapp-default-rtdb.europe-west1.firebasedatabase.app",
-                projectId: "fundaowebapp",
-                storageBucket: "fundaowebapp.appspot.com",
-                messagingSenderId: "633844833791",
-                appId: "1:633844833791:web:89352e1e7999fa84f15bca",
-                measurementId: "G-VVK3G0T63B"
+                apiKey: "AIzaSyD5Fdi5iW-SUPCd4Z0lZkeoiTqb1SBGv7U",
+                authDomain: "ambdomici.firebaseapp.com",
+                databaseURL: "https://ambdomici-default-rtdb.europe-west1.firebasedatabase.app",
+                projectId: "ambdomici",
+                storageBucket: "ambdomici.appspot.com",
+                messagingSenderId: "542747355418",
+                appId: "1:542747355418:web:5c77fbe0afc2fa6ca764a3",
+                measurementId: "G-KSX73XWPZF"
             };
             //inicializar a app
             initializeApp(config);
@@ -99,7 +93,7 @@
 
             var database = getDatabase();
             //query para ir buscar a ultima entrada na base de dados
-            const commentsRef = query(ref(database, 'UsersData/casaDHT3/readings'), limitToLast(1));
+            const commentsRef = query(ref(database, 'Casa1DHT'), limitToLast(1));
             //on ChildAdded dá update sem ser necessário dar refresh ah pagina ONLISTEN
             onChildAdded(commentsRef, (data) => {
                 //colocar os dados recebidos nas labels
@@ -117,6 +111,58 @@
                 //const dateObject = new Date(parseInt(milliseconds, 10));
                 //const humanDateFormat = dateObject.toLocaleString();
             });
+            function CreateTableFromJSON(){
+                /*
+                var a;
+                if(a == 1){
+                    document.getElementById("ex-table").style.display="inline";
+                    return a = 0;
+                }
+                else{
+                    document.getElementById("ex-table").style.display="none";
+                    return a = 1;
+                }
+                */
+                $('#ex-table').empty();
+                //$('#ex-table').hide();
+                $('#ex-table').show();
+                $('#last10Btn').click(function(){
+                    $("#ex-table").toggle();
+                });
+                //configuração da app+database
+                var config = {
+                    apiKey: "AIzaSyD5Fdi5iW-SUPCd4Z0lZkeoiTqb1SBGv7U",
+                    authDomain: "ambdomici.firebaseapp.com",
+                    databaseURL: "https://ambdomici-default-rtdb.europe-west1.firebasedatabase.app",
+                    projectId: "ambdomici",
+                    storageBucket: "ambdomici.appspot.com",
+                    messagingSenderId: "542747355418",
+                    appId: "1:542747355418:web:5c77fbe0afc2fa6ca764a3",
+                    measurementId: "G-KSX73XWPZF"
+                };
+                //inicializar a app
+                initializeApp(config);
+                var database = getDatabase();
+                //query para ir buscar a ultima entrada na base de dados
+                const commentsRef = query(ref(database, 'Casa1DHT'), limitToLast(10));
+                //on ChildAdded dá update sem ser necessário dar refresh ah pagina ONLISTEN
+                get(commentsRef).then((snapshot) => {
+                    if (snapshot.exists()) {
+                        var content = '';
+                        snapshot.forEach(function (data) {
+                            var val = data.val();
+                            content += '<tr>';
+                            //content += '<td>' + val.mac + '</td>';
+                            content += '<td>' + val.hum + " Pa" + '</td>';
+                            content += '<td>' + val.temp + " ºC" + '</td>';
+
+                        });
+                        content = '<thead><tr><th>Humidade</th><th>Temperatura</th></tr></thead>' + content;
+                        $('#ex-table').append(content);
+                    }
+                });
+            }
+            window.CreateTableFromJSON = CreateTableFromJSON;
         </script>
 
         <!--
