@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ambientes Domiciliários</title>
+    <link rel = "stylesheet" href = "style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=BioRhyme:wght@200;300;400;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet"> 
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js" type="text/javascript" defer></script>
+    <script src = "main.js" defer></script>
+</head>
+<body>
+    <header class = "header">
+        <div class = "hamb-menu">
+            <div class = "hamb-lines"></div>
+        </div>
+        <h2><a href = "index.html">Ambientes Domiciliários</a></h2>
+        <nav>
+            <ul class = "menu-items">
+                <li><a href = "mapa.html" class = "menu-item" > Mapa Geral </a></li> 
+                <li><a href = "dados.html" class = "menu-item" > Dados em Tempo Real </a></li> 
+                <li><a href = "historico.html" class = "menu-item" > Histórico </a></li> 
+            </ul>
+        </nav>
+    </header>
+    <section class = "section hero-section">
+        <table class = "content-table">
+            <caption>Casa1DHT</caption>
+            <thead>
+                <tr>
+                    <th>Sensor</th>
+                    <th>Registo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Humidade</td><td id = "hum"></td>
+                </tr>
+                <tr>
+                    <td>Temperatura</td><td id = "temp"></td>
+                </tr>   
+                <tr>
+                    <td>Data</td><td id = "date"></td>
+                </tr>
+                <!--                   
+                <tr>
+                    <td>Pressão</td><td id = "press"></td>
+                </tr>
+                <tr>
+                    <td>Altitude</td><td id = "alt"></td>
+                </tr>
+                --> 
+            </tbody>
+        </table>
+        <input id = "last10Btn" type = "button" onclick = "CreateTableFromJSON()" value = "Últimas 10 Leituras" />
+        <table class = "content-table last10Table" id = "ex-table"></table>
+        <script type="module">
+            /*
+            $(document).ready(function () {
+                $('#ex-table').hide();
+            });
+            */
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.1/firebase-app.js";
+            import { getDatabase, set, ref, child, update, remove, get, query, limitToLast, onChildAdded } from "https://www.gstatic.com/firebasejs/9.4.1/firebase-database.js";
+
+        //configuração da app+database
+            const config = {
+                apiKey: "AIzaSyD5Fdi5iW-SUPCd4Z0lZkeoiTqb1SBGv7U",
+                authDomain: "ambdomici.firebaseapp.com",
+                databaseURL: "https://ambdomici-default-rtdb.europe-west1.firebasedatabase.app",
+                projectId: "ambdomici",
+                storageBucket: "ambdomici.appspot.com",
+                messagingSenderId: "542747355418",
+                appId: "1:542747355418:web:5c77fbe0afc2fa6ca764a3",
+                measurementId: "G-KSX73XWPZF"
+            };
+            //inicializar a app
+            initializeApp(config);
+
+
+            var database = getDatabase();
+            //query para ir buscar a ultima entrada na base de dados
+            const commentsRef = query(ref(database, 'Casa1DHT'), limitToLast(1));
+            //on ChildAdded dá update sem ser necessário dar refresh ah pagina ONLISTEN
+            onChildAdded(commentsRef, (data) => {
+                //colocar os dados recebidos nas labels
+                
+                var temperature = document.getElementById("temp");
+                temperature.innerHTML = data.val().temperature + " ºC";
+                var humidity = document.getElementById("hum");
+                humidity.innerHTML = data.val().humidity + " %";
+                var timestamp = data.val().date;
+                var date = new Date(timestamp * 1000);
+                var formatDate = (date.getDate() + "/" + (date.getMonth()+1) + "/" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds());
+                var date = document.getElementById("date");
+                date.innerHTML = formatDate;
+
+                //const dateObject = new Date(parseInt(milliseconds, 10));
+                //const humanDateFormat = dateObject.toLocaleString();
+            });
+            function CreateTableFromJSON(){
+                $('#ex-table').empty();
+                //$('#ex-table').hide();
+                $('#ex-table').show();
+                $('#last10Btn').click(function(){
+                    $("#ex-table").toggle();
+                });
+                //configuração da app+database
+                var config = {
+                    apiKey: "AIzaSyD5Fdi5iW-SUPCd4Z0lZkeoiTqb1SBGv7U",
+                    authDomain: "ambdomici.firebaseapp.com",
+                    databaseURL: "https://ambdomici-default-rtdb.europe-west1.firebasedatabase.app",
+                    projectId: "ambdomici",
+                    storageBucket: "ambdomici.appspot.com",
+                    messagingSenderId: "542747355418",
+                    appId: "1:542747355418:web:5c77fbe0afc2fa6ca764a3",
+                    measurementId: "G-KSX73XWPZF"
+                };
+                //inicializar a app
+                initializeApp(config);
+                var database = getDatabase();
+                //query para ir buscar a ultima entrada na base de dados
+                const commentsRef = query(ref(database, 'Casa1DHT'), limitToLast(10));
+                //on ChildAdded dá update sem ser necessário dar refresh ah pagina ONLISTEN
+                get(commentsRef).then((snapshot) => {
+                    if (snapshot.exists()) {
+                        var content = '';
+                        snapshot.forEach(function (data) {
+                            var val = data.val();
+                            content += '<tr>';
+                            //content += '<td>' + val.mac + '</td>';
+                            content += '<td>' + val.humidity + " Pa" + '</td>';
+                            content += '<td>' + val.temperature + " ºC" + '</td>';
+                            content += '</tr>';
+
+                        });
+                        content = '<thead><tr><th>Humidade</th><th>Temperatura</th></tr></thead>' + content;
+                        $('#ex-table').append(content);
+                    }
+                });
+            }
+            window.CreateTableFromJSON = CreateTableFromJSON;
+        </script>
+    </section>
+</body>
+</html>

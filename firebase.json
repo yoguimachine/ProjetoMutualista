@@ -1,6 +1,5 @@
 {
   "hosting": {
-    "site": "adomici",
     "public": "public",
     "ignore": [
       "firebase.json",
