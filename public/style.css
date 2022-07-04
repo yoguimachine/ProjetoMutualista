@@ -156,6 +156,11 @@ body {
     color: #111111;
 }
 
+p{
+    font-size: 1rem;
+    font-weight: 450;
+}
+
 /*.table-col {
     position: relative;
     height: 100vh;
@@ -238,9 +243,9 @@ input {
     border: none;
 }
 
-.form-container {
+.text-container {
     background-color: #39daa9;
-    padding: 1rem 1.6rem;
+    padding: 3rem 3rem;
     color: #05203d;
     border-radius: 5px 5px 5px 5px;
     overflow: hidden;
