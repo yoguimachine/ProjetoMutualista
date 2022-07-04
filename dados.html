@@ -15,13 +15,6 @@
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js" type="text/javascript" defer></script>
     <script src = "main.js" defer></script>
-    <!--
-    <script src = "tables.js" defer></script>
-    <script>
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.1/firebase-app.js";
-        import { getDatabase, set, ref, child, update, remove, get, query, limitToLast, onChildAdded } from "https://www.gstatic.com/firebasejs/9.4.1/firebase-database.js";
-    </script>
-    -->
 </head>
 <body>
     <header class = "header">
@@ -39,6 +32,7 @@
     </header>
     <section class = "section hero-section">
         <table class = "content-table">
+            <caption>Casa1DHT</caption>
             <thead>
                 <tr>
                     <th>Sensor</th>
@@ -102,7 +96,7 @@
                 temperature.innerHTML = data.val().temperature + " ºC";
                 var humidity = document.getElementById("hum");
                 humidity.innerHTML = data.val().humidity + " %";
-                var timestamp = data.val().timestamp;
+                var timestamp = data.val().date;
                 var date = new Date(timestamp * 1000);
                 var formatDate = (date.getDate() + "/" + (date.getMonth()+1) + "/" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds());
                 var date = document.getElementById("date");
@@ -112,17 +106,6 @@
                 //const humanDateFormat = dateObject.toLocaleString();
             });
             function CreateTableFromJSON(){
-                /*
-                var a;
-                if(a == 1){
-                    document.getElementById("ex-table").style.display="inline";
-                    return a = 0;
-                }
-                else{
-                    document.getElementById("ex-table").style.display="none";
-                    return a = 1;
-                }
-                */
                 $('#ex-table').empty();
                 //$('#ex-table').hide();
                 $('#ex-table').show();
@@ -153,8 +136,9 @@
                             var val = data.val();
                             content += '<tr>';
                             //content += '<td>' + val.mac + '</td>';
-                            content += '<td>' + val.hum + " Pa" + '</td>';
-                            content += '<td>' + val.temp + " ºC" + '</td>';
+                            content += '<td>' + val.humidity + " Pa" + '</td>';
+                            content += '<td>' + val.temperature + " ºC" + '</td>';
+                            content += '</tr>';
 
                         });
                         content = '<thead><tr><th>Humidade</th><th>Temperatura</th></tr></thead>' + content;
@@ -164,44 +148,6 @@
             }
             window.CreateTableFromJSON = CreateTableFromJSON;
         </script>
-
-        <!--
-        <div class = "graph-canvas">
-            <script>
-                var width = 500, height = 600;
-
-                var data = [10, 15, 20, 25, 30];
-                var svg = d3.select(".graph-canvas")
-                    .append("svg")
-                    .attr("width", width)
-                    .attr("height", height);
-
-                var xscale = d3.scaleLinear()
-                    .domain([0, d3.max(data)])
-                    .range([0, width - 100]);
-
-                var yscale = d3.scaleLinear()
-                    .domain([0, d3.max(data)])
-                    .range([height/2, 0]);
-
-                var x_axis = d3.axisBottom()
-                    .scale(xscale);
-
-                var y_axis = d3.axisLeft()
-                    .scale(yscale);
-
-                svg.append("g")
-                    .attr("transform", "translate(50, 10)")
-                    .call(y_axis);
-
-                var xAxisTranslate = height/2 + 10;
-
-                svg.append("g")
-                    .attr("transform", "translate(50, " + xAxisTranslate  +")")
-                    .call(x_axis)
-            </script>
-        </div>
-        -->
     </section>
 </body>
 </html>

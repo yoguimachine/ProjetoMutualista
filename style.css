@@ -116,6 +116,7 @@ body {
 }
 
 .hamb-menu {
+   padding-top: 0.3rem;
     display: flex;
 }
 
@@ -176,6 +177,11 @@ body {
     margin: 25px 0;
     font-size: 0.9em;
     min-width: 400px;
+}
+
+.content-table caption{
+    font-size: 1rem;
+    font-weight: 450;
 }
 
 .content-table thead tr{
